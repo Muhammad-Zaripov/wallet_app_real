@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_app/controllers/wallet_controller.dart';
 import 'package:wallet_app/data/datasources/local_datasources.dart';
 
 class AddLimitCostWidget extends StatefulWidget {
@@ -14,6 +15,7 @@ class _AddLimitCostWidgetState extends State<AddLimitCostWidget> {
   Widget build(BuildContext context) {
     final _limitController = TextEditingController();
     final _localDatasource = LocalDatasources();
+    final _walletController = WalletController();
     final _formKey = GlobalKey<FormState>();
     return Form(
       key: _formKey,
@@ -64,6 +66,9 @@ class _AddLimitCostWidgetState extends State<AddLimitCostWidget> {
                   Navigator.pop(context);
                   widget.onCostAdded();
                   _limitController.clear();
+                  setState(() {
+                    _walletController.calculatePercent();
+                  });
                 },
                 child: Text(
                   'Qo\'shish',

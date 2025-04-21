@@ -15,7 +15,13 @@ class WalletController {
   int limitCost = 0;
 
   double calculatePercent() {
-    return (sum / limitCost) * 100;
+    if (sum > limitCost) {
+      return 100;
+    }
+    if (sum != 0 || limitCost != 0) {
+      return (sum / limitCost) * 100;
+    }
+    return 0;
   }
 
   final _localDatabase = LocalDatabase();

@@ -98,6 +98,9 @@ class _AddCostsButtonWidgetState extends State<AddCostsButtonWidget> {
                               await walletController.getCosts();
                               Navigator.pop(context);
                               widget.onAdded();
+                              setState(() {
+                                walletController.calculatePercent();
+                              });
                             },
                             child: Text(
                               'Qo\'shish',

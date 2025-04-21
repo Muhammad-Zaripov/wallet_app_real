@@ -3,10 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:wallet_app/controllers/wallet_controller.dart';
+import 'package:wallet_app/data/database/local_database.dart';
 import 'package:wallet_app/data/datasources/local_datasources.dart';
 import 'package:wallet_app/views/widgets/add_costs_button_widget.dart';
 import 'package:wallet_app/views/widgets/add_limit_cost_widget.dart';
 import 'package:wallet_app/views/widgets/list_view_widget.dart';
+import 'package:wallet_app/views/widgets/search_view_delegate.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _walletController = WalletController();
   final _localDatasource = LocalDatasources();
+  final _loaclDatabase = LocalDatabase();
 
   DateTime _selectedDate = DateTime.now();
 
@@ -122,41 +125,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 25,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (contex) {
-                              return AddLimitCostWidget(
-                                onCostAdded: () {
-                                  setState(() {
-                                    _loadData();
-                                  });
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (contex) {
+                                  return AddLimitCostWidget(
+                                    onCostAdded: () {
+                                      setState(() {
+                                        _loadData();
+                                      });
+                                    },
+                                  );
                                 },
                               );
                             },
-                          );
-                        },
-                        child: Text(
-                          'Hisob:  ${NumberFormat('#,###').format(_walletController.limitCost)} so\'m',
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 20,
+                            child: Text(
+                              'Hisob:  ${NumberFormat('#,###').format(_walletController.limitCost)} so\'m',
+                              style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
-                        ),
+                          IconButton(
+                            onPressed: () async {
+                              await showSearch(
+                                context: context,
+                                delegate: SearchViewDelegate(
+                                  await _loaclDatabase.getCosts(),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.search, color: Colors.blueGrey),
+                          ),
+                        ],
                       ),
                       Center(
                         child: LinearPercentIndicator(
                           animation: true,
-                          width: 310,
+                          width: 290,
                           lineHeight: 20.0,
-                          percent: 0.6,
+                          percent: _walletController.calculatePercent() / 100,
                           backgroundColor: Colors.grey[300],
                           progressColor: Colors.blueGrey,
                           barRadius: const Radius.circular(16),
                           trailing: Text(
-                            "${_walletController.calculatePercent()}%",
+                            "${_walletController.calculatePercent().toStringAsFixed(1)}%",
                             style: TextStyle(
                               color: Colors.blueGrey,
                               fontSize: 20,
@@ -178,7 +197,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.blueGrey,
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: ListViewWidget(),
+                child: ListViewWidget(
+                  onDeleted: () {
+                    setState(() {});
+                  },
+                ),
               ),
             ),
           ],

@@ -5,7 +5,8 @@ import 'package:wallet_app/controllers/wallet_controller.dart';
 import 'edit_costs_button_widget.dart';
 
 class ListViewWidget extends StatefulWidget {
-  const ListViewWidget({super.key});
+  final VoidCallback onDeleted;
+  const ListViewWidget({super.key, required this.onDeleted});
 
   @override
   State<ListViewWidget> createState() => _ListViewWidgetState();
@@ -34,9 +35,7 @@ class _ListViewWidgetState extends State<ListViewWidget> {
             ),
             onDismissed: (direction) async {
               await walletController.deleteCost(cost.id!);
-              setState(() {
-                walletController.sum;
-              });
+              widget.onDeleted();
             },
             child: ListTile(
               onTap: () {
