@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -58,9 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF4F1EE),
+      // backgroundColor: Color(0xffF4F1EE),
       appBar: AppBar(
-        backgroundColor: Color(0xffF4F1EE),
+        // backgroundColor: Color(0xffF4F1EE),
         leading: IconButton(
           onPressed: () {
             _selectedDate = DateTime(
@@ -84,15 +85,33 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         actions: [
-          IconButton(
-            onPressed: () {
-              _selectedDate = DateTime(
-                _selectedDate.year,
-                _selectedDate.month + 1,
-              );
-              setState(() {});
-            },
-            icon: Icon(Icons.arrow_forward_ios, color: Colors.blueGrey),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  if (AdaptiveTheme.of(context).mode ==
+                      AdaptiveThemeMode.light) {
+                    AdaptiveTheme.of(context).setDark();
+                  } else {
+                    AdaptiveTheme.of(context).setLight();
+                  }
+                },
+                icon:
+                    (AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light)
+                        ? Icon(Icons.dark_mode, color: Colors.blueGrey)
+                        : Icon(Icons.light_mode),
+              ),
+              IconButton(
+                onPressed: () {
+                  _selectedDate = DateTime(
+                    _selectedDate.year,
+                    _selectedDate.month + 1,
+                  );
+                  setState(() {});
+                },
+                icon: Icon(Icons.arrow_forward_ios, color: Colors.blueGrey),
+              ),
+            ],
           ),
         ],
       ),
