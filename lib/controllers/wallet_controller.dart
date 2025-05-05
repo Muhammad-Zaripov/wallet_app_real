@@ -62,6 +62,7 @@ class WalletController {
     );
     if (date != null) {
       final TimeOfDay? time = await showTimePicker(
+        // ignore: use_build_context_synchronously
         context: context,
         initialTime: TimeOfDay.now(),
       );

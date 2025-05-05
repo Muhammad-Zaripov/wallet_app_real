@@ -8,9 +8,10 @@ environment:
 
 dependencies:
   adaptive_theme: ^3.7.0
+  easy_localization: ^3.0.7+1
   flutter:
     sdk: flutter
-  intl: ^0.20.2
+  intl: ^0.19.0
   month_picker_dialog: ^6.0.2
   path_provider: ^2.1.5
   percent_indicator: ^4.2.5
@@ -24,3 +25,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/translate/

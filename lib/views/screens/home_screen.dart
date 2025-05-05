@@ -1,6 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:wallet_app/controllers/wallet_controller.dart';
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                             child: Text(
-                              'Hisob:  ${NumberFormat('#,###').format(_walletController.limitCost)} so\'m',
+                              '${context.tr("hisob")}  ${NumberFormat('#,###').format(_walletController.limitCost)} so\'m',
                               style: TextStyle(
                                 color: Colors.blueGrey,
                                 fontSize: 20,
@@ -174,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           IconButton(
                             onPressed: () async {
                               await showSearch(
+                                // ignore: use_build_context_synchronously
                                 context: context,
                                 delegate: SearchViewDelegate(
                                   await _loaclDatabase.getCosts(),
